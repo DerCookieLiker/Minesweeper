@@ -7,6 +7,7 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 800), "Minesweeper", sf::Style::Titlebar | sf::Style::Close);
+    window.setFramerateLimit(60);
     Grid g;
 
     sf::Clock current;
@@ -32,13 +33,13 @@ int main()
             sf::Vector2i mousPos = sf::Mouse::getPosition(window);
             g.checkField(mousPos.x, mousPos.y);
             //std::cout << "[Left] mPos_X: " << mousPos.x << " | " << "mPos_Y: " << mousPos.y << std::endl;
-            mouseDelay = 0.2;
+            mouseDelay = 0.1;
         }
         if(sf::Mouse::isButtonPressed(sf::Mouse::Right) && !mouseDelay){
             sf::Vector2i mousPos = sf::Mouse::getPosition(window);
             g.switchFlag(mousPos.x, mousPos.y);
             //std::cout << "[Left] mPos_X: " << mousPos.x << " | " << "mPos_Y: " << mousPos.y << std::endl;
-            mouseDelay = 0.2;
+            mouseDelay = 0.1;
         }
 
         window.clear(sf::Color::White);

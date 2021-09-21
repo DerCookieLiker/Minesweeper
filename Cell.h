@@ -18,6 +18,7 @@ public:
     void setMine(bool mine);
     void setFlag(bool flag);
     void setVisible(bool visible);
+    void setWrongFlag(bool wrongFlag);
 
     int getIndexY() const;
     int getIndexX() const;
@@ -28,6 +29,7 @@ public:
     bool isMine() const;
     bool isFlag() const;
     bool isVisible() const;
+    bool isWrongFlag() const;
 
 private:
     int indexX;
@@ -37,6 +39,8 @@ private:
     bool mine;
     bool flag;
     bool visible;
+    bool wrongFlag;
+
     int number;
 
     sf::Color color;

@@ -19,8 +19,11 @@ private:
     int sizeY;
 
     int numberOfMines;
+    int numberOfFlags;
     int openFieldCounter;
     bool firstClick;
+
+    bool gameRun;
     sf::Vector2i getContain(int x, int y);
 
     void setRandomBombs(int x, int y);
@@ -28,4 +31,5 @@ private:
     void openFields(int x, int y);
     bool inRange(int x, int y) const;
     void setNumbers();
+    void openBombs();
 };

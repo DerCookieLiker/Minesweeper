@@ -6,6 +6,7 @@ Cell::Cell(const sf::Color &color, int indexX, int indexY, int width, bool mine,
     mine(mine),
     flag(false),
     visible(false),
+    wrongFlag(false),
     number(number),
     color(color) { }
 
@@ -15,11 +16,11 @@ void Cell::draw(sf::RenderWindow &window) const{
     shape.setFillColor(this->color);
     shape.setPosition({(float) this->indexX * this->width, (float) this->indexY * this->width});
     shape.setOutlineColor(sf::Color::Black);
-    shape.setOutlineThickness(1.0);
+    //shape.setOutlineThickness(1.0);
 
     window.draw(shape);
     if(this->visible) {
-        if(this->mine){
+        if(this->mine && !this->wrongFlag){
             sf::Texture t;
             t.loadFromFile("assets/images/bomb.png");
             sf::Sprite s;
@@ -58,7 +59,11 @@ void Cell::draw(sf::RenderWindow &window) const{
     }
     if(this->flag){
             sf::Texture t;
-            t.loadFromFile("assets/images/flag.png");
+            if(this->wrongFlag){
+                t.loadFromFile("assets/images/Cross.png");
+            }else {
+                t.loadFromFile("assets/images/flag.png");
+            }
             sf::Sprite s;
             s.setTexture(t, false);
             s.setScale({3, 3});
@@ -99,6 +104,9 @@ void Cell::setFlag(bool flag){
 void Cell::setVisible(bool visible){
     this->visible = visible;
 }
+void Cell::setWrongFlag(bool wrongFlag){
+    this->wrongFlag = wrongFlag;
+}
 
 int Cell::getIndexY() const{
     return this->indexX;
@@ -124,4 +132,7 @@ bool Cell::isFlag() const{
 }
 bool Cell::isVisible() const{
     return this->visible;
+}
+bool Cell::isWrongFlag() const {
+    return this->wrongFlag;
 }

@@ -11,18 +11,21 @@ Grid::Grid(int sizeX, int sizeY) : sizeX(sizeX), sizeY(sizeY) {
     for(int i = 0; i < this->sizeY; i++){
         this->grid[i] = new Cell*[this->sizeX];
         for(int j = 0; j < this->sizeX; j++){
-            this->grid[i][j] = new Cell((j % 2 == switcher) ? sf::Color(0, 176, 47) : sf::Color(0, 82, 22), i, j, 50, false);
+            this->grid[i][j] = new Cell((j % 2 == switcher) ? sf::Color(0, 176, 47) : sf::Color(0, 150, 30), i, j, 50, false);
         }
         switcher = !switcher;
     }
     this->firstClick = true;
     this->openFieldCounter = 0;
     this->numberOfMines = 50;
+    this->numberOfFlags = 0;
+
+    this->gameRun = true;
 }
 Grid::~Grid() {
 
     for(int i = 0; i < this->sizeY; i++){
-        for(int j = 0; j < this->sizeY; j++){
+        for(int j = 0; j < this->sizeX; j++){
             delete this->grid[i][j];
         }
         delete[] this->grid[i];
@@ -32,6 +35,8 @@ Grid::~Grid() {
 
 void Grid::checkField(int x, int y){
 
+    if(!this->gameRun) return;
+
     sf::Vector2i pos = this->getContain(x, y);
     if(pos.x == -1 && pos.y == -1) return;
     if(this->grid[pos.y][pos.x]->isFlag()) return;
@@ -40,13 +45,35 @@ void Grid::checkField(int x, int y){
         this->setNumbers();
         this->firstClick = false;
     }
+    if(this->grid[pos.y][pos.x]->isMine()){
+        this->gameRun = false;
+        this->openBombs();
+        return;
+    }
 
     this->openFields(pos.x, pos.y);
 }
 void Grid::switchFlag(int x, int y){
+
+    if(!this->gameRun) return;
+
     sf::Vector2i pos = this->getContain(x, y);
-    if((pos.x == -1 && pos.y == -1) || this->grid[pos.y][pos.x]->isVisible()) return;
-    this->grid[pos.y][pos.x]->setFlag(!this->grid[pos.y][pos.x]->isFlag());
+    if((pos.x == -1 && pos.y == -1)|| this->grid[pos.y][pos.x]->isVisible()) return;
+
+    if(this->numberOfFlags < this->numberOfMines){
+        if(!this->grid[pos.y][pos.x]->isFlag()){
+            this->numberOfFlags++;
+            this->grid[pos.y][pos.x]->setFlag(true);
+        }else{
+            this->numberOfFlags--;
+            this->grid[pos.y][pos.x]->setFlag(false);
+        }
+    }else{
+        if(this->grid[pos.y][pos.x]->isFlag()){
+            this->numberOfFlags--;
+            this->grid[pos.y][pos.x]->setFlag(false);
+        }
+    }
 }
 void Grid::render(sf::RenderWindow &window) const {
     for(int i = 0; i < this->sizeY; i++){
@@ -69,7 +96,6 @@ void Grid::setRandomBombs(int x, int y){
 
 srand(time(NULL));
 
-    int index;
     int randY, randX;
     for(int i = 0; i < this->numberOfMines; i++){
 
@@ -95,7 +121,7 @@ srand(time(NULL));
 void Grid::openFields(int x, int y){
 
     this->grid[y][x]->setVisible(true);
-    this->grid[y][x]->setColor(sf::Color(150, 150, 150));
+    this->grid[y][x]->setColor(( x % 2 == (y % 2 == 0)) ? sf::Color(150, 150, 150) : sf::Color(120, 120, 120));
     this->openFieldCounter++;
 
     if(this->grid[y][x]->getNumber() == 0){
@@ -134,4 +160,17 @@ int Grid::countBombs(int x, int y) const{
         }
     }
     return counter;
+}
+void Grid::openBombs() {
+
+    for(int i = 0; i < this->sizeY; i++){
+        for(int j = 0; j < this->sizeX; j++){
+            if(this->grid[i][j]->isMine() && !this->grid[i][j]->isFlag()){
+                this->grid[i][j]->setVisible(true);
+            }
+            if(this->grid[i][j]->isFlag() && !this->grid[i][j]->isMine()){
+                this->grid[i][j]->setWrongFlag(true);
+            }
+        }
+    }
 }

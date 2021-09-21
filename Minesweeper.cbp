@@ -45,12 +45,16 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 			<Add directory="D:/Code_Blocks/librarys/SFML-2.5.1/include" />
+			<Add directory="C:/Users/gabri/Documents/lib/SFML-2.5.1/include" />
 		</Compiler>
 		<Linker>
 			<Add directory="D:/Code_Blocks/librarys/SFML-2.5.1/lib" />
+			<Add directory="C:/Users/gabri/Documents/lib/SFML-2.5.1/lib" />
 		</Linker>
 		<Unit filename="Cell.cpp" />
 		<Unit filename="Cell.h" />
+		<Unit filename="Grid.cpp" />
+		<Unit filename="Grid.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="sfml-audio-2.dll" />
 		<Unit filename="sfml-audio-d-2.dll" />
