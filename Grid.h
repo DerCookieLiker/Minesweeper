@@ -12,6 +12,8 @@ public:
     void checkField(int x, int y);
     void switchFlag(int x, int y);
     void render(sf::RenderWindow &window) const;
+
+    bool checkWin() const;
 private:
     Cell* **grid;
 

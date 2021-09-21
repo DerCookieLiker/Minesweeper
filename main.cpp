@@ -13,7 +13,7 @@ int main()
     sf::Clock current;
     float deltaTime;
     float mouseDelay = 0;
-    while (window.isOpen()) {
+    while (window.isOpen() && !g.checkWin()) {
 
         deltaTime = current.restart().asSeconds();
 

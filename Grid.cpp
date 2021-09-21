@@ -174,3 +174,7 @@ void Grid::openBombs() {
         }
     }
 }
+bool Grid::checkWin() const{
+
+    return (this->openFieldCounter == (this->sizeX * this->sizeY) - this->numberOfMines);
+}
